@@ -29,14 +29,14 @@ If you prefer a cloud VM over local installation (e.g., for resource-intensive t
 11. Wait for the instance status to show **running** and pass status checks (view in the EC2 console under Instances).
 
 ### 2. Connect to the EC2 Instance via SSH (Initial Verification)
-1. In the EC2 console, select your instance and choose **Connect**.
-2. On the **SSH client** tab, copy the example command (e.g., `ssh -i "sre-workshop-key.pem" ec2-user@ec2-XXX-XXX-XXX-XXX.compute-1.amazonaws.com`).
-3. In your local terminal:
-   - Navigate to the directory with your .pem file.
-   - Run `chmod 400 sre-workshop-key.pem` (on macOS/Linux) to set permissions.
-   - Paste and run the SSH command.
-4. Type "yes" if prompted about the host fingerprint.
-5. You should now be logged in as ec2-user@ip-address.
+1. Click the instance and click connect
+
+<img width="1915" height="545" alt="image" src="https://github.com/user-attachments/assets/fccea819-6a40-4ac7-9812-2b1e4b216c57" />
+
+2. Click Ec2 Instance Connect > Connect
+
+<img width="1827" height="662" alt="image" src="https://github.com/user-attachments/assets/2b4ca88e-1600-4358-a70f-48c1be7221c3" />
+
 
 ### 3. Install Docker on the EC2 Instance
 Once connected via SSH:
@@ -47,47 +47,13 @@ Once connected via SSH:
 5. Add your user to the Docker group for non-root access: `sudo usermod -a -G docker ec2-user`.
 6. Log out and back in (exit SSH and reconnect) for group changes to take effect.
 7. Verify: `docker --version` and `docker run hello-world`.
+8. Install docker compose:
+```
+sudo curl -SL https://github.com/docker/compose/releases/download/v2.29.2/docker-compose-linux-x86_64 \
+    -o /usr/local/bin/docker-compose
 
-### 4. Install Docker Compose on the EC2 Instance
-While still connected via SSH:
-1. Create the plugins directory: `sudo mkdir -p /usr/libexec/docker/cli-plugins/` (or `/usr/local/lib/docker/cli-plugins/` if preferred).
-2. Download the latest Docker Compose plugin: `sudo curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -o /usr/libexec/docker/cli-plugins/docker-compose`.
-3. Make it executable: `sudo chmod +x /usr/libexec/docker/cli-plugins/docker-compose`.
-4. Verify: `docker compose version` (note: use `docker compose` instead of `docker-compose` for v2+).
+sudo chmod +x /usr/local/bin/docker-compose
 
-### 5. Access the EC2 Instance via VS Code
-1. Locally, open VS Code and install the **Remote - SSH** extension (search in Extensions view, authored by Microsoft).
-2. Open the Command Palette (Ctrl+Shift+P or Cmd+Shift+P on macOS) and select **Remote-SSH: Connect to Host...**.
-3. Enter the SSH connection string: `ec2-user@ec2-XXX-XXX-XXX-XXX.compute-1.amazonaws.com` (replace with your instance's public DNS).
-4. When prompted, select the platform as **Linux**.
-5. For authentication, VS Code will use your local SSH config or prompt for the key—ensure your .pem file is in ~/.ssh/ or configure it in VS Code settings (add to SSH config file via **Remote-SSH: Open SSH Configuration File...**).
-   - Example config entry in ~/.ssh/config:
-     ```
-     Host sre-workshop-ec2
-       HostName ec2-XXX-XXX-XXX-XXX.compute-1.amazonaws.com
-       User ec2-user
-       IdentityFile ~/.ssh/sre-workshop-key.pem
-     ```
-   - Then connect using "sre-workshop-ec2" as the host.
-6. Once connected, open a folder on the remote (e.g., /home/ec2-user/) via **File > Open Folder**.
-7. Install VS Code extensions remotely as needed (e.g., Docker, YAML).
-8. Use the integrated terminal in VS Code to run Docker commands, edit files, and proceed with the workshop setup.
+docker-compose --version
+```
 
-**Tips for EC2 Setup**:
-- **Costs**: Monitor in AWS Billing—t3.micro is free for ~750 hours/month in Free Tier.
-- **Security**: After setup, restrict SSH to your IP in the security group.
-- **Persistence**: Install other tools (e.g., Git, load testing) on the EC2 via SSH or VS Code terminal using similar commands (e.g., `sudo dnf install -y git apache2-utils` for Git and ab).
-- **Cleanup**: Terminate the instance when done to avoid charges (EC2 console > Instances > Actions > Terminate).
-- **Ports**: For workshop apps, add security group rules for ports like 5000, 9090 (allow from your IP or 0.0.0.0/0 temporarily).
-
-## Additional Notes
-- **No Local Python or Other Runtimes Needed**: All lab code runs inside Docker containers.
-- **OS Compatibility**: Tested on macOS, Linux, and Windows (use WSL on Windows for terminal commands). EC2 uses Amazon Linux for cloud.
-- **Troubleshooting**:
-  - Docker errors? Check system requirements and restart the Docker service.
-  - Firewall issues? Ensure ports like 5000 and 9090 are open locally or in EC2 security groups.
-  - On corporate networks: You may need admin rights or VPN adjustments.
-  - SSH connection issues? Verify key permissions (chmod 400) and security group rules.
-- **Alternative to Local/EC2 Setup**: If installations are problematic, use GitHub Codespaces (free tier) for a browser-based environment—no local installs required.
-- **Preparation Time**: Aim to complete this before the workshop starts.
-Once set up, you're ready for Lab 1! If you run into issues, note them down for discussion during the workshop. Happy setting up! 🚀
