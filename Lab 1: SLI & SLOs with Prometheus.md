@@ -250,12 +250,58 @@ Create `simulate_traffic.sh`:
 ab -n 800 -c 10 http://localhost:3000/success
 ab -n 200 -c 10 http://localhost:3000/failure
 ```
+
 1. Make it runnable: `chmod +x simulate_traffic.sh`
 2. Run: `./simulate_traffic.sh`. For EC2 users: Run this in the VS Code remote terminal—`localhost` works as it's internal to the instance.
 <img width="1160" height="770" alt="Lab1-05" src="https://github.com/user-attachments/assets/04c36c1a-7b28-41b8-9741-51faa9a4d7f1" />
+
+
+For Windows:
+```
+@'
+# --- load_test.ps1 Script Content ---
+$TotalRequests = 800
+$TargetUrl = "http://localhost:3000/success"
+$Successes = 0
+$Failures = 0
+
+Write-Host "Starting load test: $TotalRequests requests to $TargetUrl"
+Write-Host "----------------------------------------------------"
+
+1..$TotalRequests | ForEach-Object {
+    try {
+        # Send the request and store the result
+        $Response = Invoke-WebRequest -Uri $TargetUrl -UseBasicParsing -ErrorAction Stop
+
+        # Check for success (e.g., HTTP status 200)
+        if ($Response.StatusCode -eq 200) {
+            $Successes++
+        } else {
+            $Failures++
+        }
+    } catch {
+        # Catch connection errors, timeouts, or stopped errors
+        $Failures++
+    }
+
+    # Optional: Print progress every 100 requests
+    if ($_ % 100 -eq 0) {
+        Write-Host "Progress: $_ requests sent."
+    }
+}
+
+Write-Host "----------------------------------------------------"
+Write-Host "--- Test Results ---"
+Write-Host "Total Requests: $TotalRequests"
+Write-Host "Successful Requests: $Successes"
+Write-Host "Failed Requests: $Failures"
+'@ | Set-Content -Path .\load_test.ps1 -Force
+
+
 3. In Prometheus UI: Re-run SLI queries. For EC2: Access the UI at http://<EC2-PUBLIC-IP>:9090.
    - Availability: Should be ~80% (due to failures). Is it above 99.9%? (No—discuss why and adjust script for passing tests.)
-  
+```
+
    Run prom query:
 ```
 sum(rate(flask_http_request_total{status="200"}[5m])) /
