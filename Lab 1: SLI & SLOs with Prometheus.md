@@ -269,7 +269,8 @@ If it's < 0.999 → SLO violated
     
    - Latency: Check if most are under 200ms.
 ```
-histogram_quantile(0.99, sum(rate(http_server_requests_seconds_bucket[5m])) by (le))
+histogram_quantile(0.99, sum(rate(flask_http_request_duration_seconds_bucket[1d])) by (le))
+
 ```
 **How to check it:**
 Run the query
