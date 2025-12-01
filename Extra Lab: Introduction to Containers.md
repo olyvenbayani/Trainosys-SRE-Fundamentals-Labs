@@ -178,99 +178,25 @@ docker images | grep my-node-app
 ```  
 Notice how multi-stage keeps it lean compared to a single-stage build with unnecessary build tools. This demonstrates efficiency in real-world scenarios.
 
-## 6. Demonstrating Container Benefits: Hands-On Appreciation
-To truly appreciate containerization, let's run exercises that highlight its advantages over traditional setups (e.g., installing software directly on your host, which can lead to conflicts, version mismatches, or OS dependencies).
-
-### 6.1 Isolation and Consistency: Running Conflicting Environments
-Containers allow you to run multiple versions of software side-by-side without interfering with your host or each other.
-
-6.1-a. Run a Python 2 container (an outdated version for demonstration):  
-```bash
-docker run -it --rm python:2.7-slim python -c "print('Hello from Python 2.7')"
-```  
-This uses the interactive (`-it`) and remove-on-exit (`--rm`) flags. Output: "Hello from Python 2.7".
-
-6.1-b. Immediately run a Python 3 container:  
-```bash
-docker run -it --rm python:3.9-slim python -c "print('Hello from Python 3.9')"
-```  
-Output: "Hello from Python 3.9". Notice no conflicts—try doing this without containers, and you'd need virtual environments or multiple installations, which can clutter your system.
-
-6.1-c. Reflection: Without Docker, switching Python versions might require tools like pyenv or risk breaking your global setup. Containers ensure consistency: The same image runs identically on any machine.
-
-### 6.2 Portability: Sharing Your App
-6.2-a. Tag and "share" your custom Python image (simulate pushing to Docker Hub):  
-```bash
-docker tag my-python-app myusername/my-python-app:latest
-```  
-(In a real scenario, you'd run `docker push` after logging in to Docker Hub. For now, imagine sharing this tag with a colleague—they could pull and run it instantly on their machine.)
-
-6.2-b. Run it again to confirm:  
-```bash
-docker run my-python-app
-```  
-Reflection: Images are portable files (like ZIPs but for apps). No more "it works on my machine" issues—deploy to servers, clouds, or friends' laptops effortlessly.
-
-### 6.3 Efficiency: Lightweight Resource Use
-6.3-a. Check resource usage while running a container: Start your Node app again (`docker run -d -p 3000:3000 my-node-app`), then run:  
-```bash
-docker stats
-```  
-Observe low CPU/memory compared to a full VM. Stop with Ctrl+C when done.
-
-6.3-b. Reflection: Containers share the host kernel, making them faster and lighter than VMs (which emulate full OSes). This enables scaling (e.g., in Kubernetes) without heavy overhead.
-
-## 7. Explore Basic Docker Commands
-7-a. List all images:  
-```bash
-docker images
-```
-
-7-b. List all containers (including stopped ones):  
-```bash
-docker ps -a
-```
-
-7-c. Remove a stopped container (replace `<container_id>` with an ID from `docker ps -a`):  
-```bash
-docker rm <container_id>
-```
-
-7-d. Remove an image (e.g., after stopping related containers):  
-```bash
-docker rmi my-python-app
-```
-
-## 8. Why Containerization Matters: Key Takeaways
-By completing the above, you've seen containerization in action. Here's why developers and teams love it:
-- **Consistency Across Environments**: Dev, test, and production are identical—no surprises.
-- **Isolation**: Apps and dependencies are sandboxed, preventing conflicts (as in the Python versions exercise).
-- **Portability**: Package once, run anywhere with Docker installed.
-- **Efficiency and Scalability**: Lightweight, fast startup, easy to orchestrate (e.g., with Docker Compose or Kubernetes).
-- **Version Control and Collaboration**: Images can be versioned like code, shared via registries.
-- **Security**: Reduced attack surface by minimizing host changes.
-
-Real-world example: Teams use Docker to deploy microservices reliably, saving time on setup and debugging. If you're hooked, try deploying to a cloud provider next!
-
-## 9. Cleanup
+## 6. Cleanup
 To free up resources and avoid clutter:
 
-9-a. Stop all running containers:  
+6-a. Stop all running containers:  
 ```bash
 docker stop $(docker ps -q)
 ```
 
-9-b. Remove all stopped containers:  
+6-b. Remove all stopped containers:  
 ```bash
 docker rm $(docker ps -aq)
 ```
 
-9-c. Remove all images (use with caution; this removes everything):  
+6-c. Remove all images (use with caution; this removes everything):  
 ```bash
 docker rmi $(docker images -q)
 ```
 
-9-d. If you're done with the lab directories:  
+6-d. If you're done with the lab directories:  
 ```bash
 cd .. && rm -rf docker-lab advanced-docker
 ```
