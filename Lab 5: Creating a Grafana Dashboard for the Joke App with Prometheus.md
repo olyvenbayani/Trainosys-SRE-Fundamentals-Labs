@@ -25,6 +25,29 @@ This guide is designed for beginners. Each step includes explanations, why we're
 ## Step 2: Update the Setup to Include Grafana
 **Why?** Grafana queries Prometheus data and builds interactive dashboards—great for SRE teams to monitor at a glance.
 
+### File: `requirements.txt` (Dependencies)
+Lists Python packages needed.
+```
+flask==3.0.3
+prometheus-flask-exporter==0.23.1
+```
+**Explanation:** Docker will install these when building the container. No need to install them locally.
+### File: `Dockerfile` (Build Instructions for the App Container)
+Defines how to package the app into a Docker image.
+```
+FROM python:3.9-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY app.py .
+EXPOSE 3000
+CMD ["python", "app.py"]
+```
+**Explanation:**
+- Starts from a lightweight Python image.
+- Copies files and installs dependencies.
+- Exposes port 3000 for access.
+
 Update `docker-compose.yml` (add the grafana service):
 
 ```yaml
