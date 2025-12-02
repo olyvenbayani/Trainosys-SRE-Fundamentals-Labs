@@ -355,7 +355,7 @@ ab -n 500 -c 10 http://127.0.0.1:3000/failure  # 50% errors to trigger alert
 
 1. Run: `./simulate_traffic.sh`  
 
-## Step 5: Create Your First Dashboard
+## Step 6: Create Your First Dashboard
 **Why?** Dashboards visualize metrics—build one for the Joke API.
 
 1. Grafana UI > Dashboards > New > New dashboard.  
@@ -381,7 +381,7 @@ ab -n 500 -c 10 http://127.0.0.1:3000/failure  # 50% errors to trigger alert
 
 **Activity:** Generate traffic with `simulate_traffic.sh`—watch dashboard update in real-time (refresh or set auto-refresh to 10s).
 
-## Step 6: Customize and Export the Dashboard
+## Step 7: Customize and Export the Dashboard
 **Why?** Make it shareable—add annotations, variables, export for teams.
 
 1. Add variable: Dashboard settings (gear icon) > Variables > New > Query type, Data source: Prometheus, Query: `label_values(job)` (filters by job). Use in panels for dynamic views.  
@@ -390,7 +390,7 @@ ab -n 500 -c 10 http://127.0.0.1:3000/failure  # 50% errors to trigger alert
 
 **Explanation:** Variables make dashboards reusable (e.g., switch services). Export JSON for version control.
 
-## Step 7: Cleanup and Reflect
+## Step 8: Cleanup and Reflect
 1. Stop: `docker-compose down -v` (removes volumes to clean data).  
 2. Think: How do dashboards help SREs? (Quick insights, correlate metrics like latency and errors.) What panels for real apps? (Add error budgets from Lab 1.)
 
@@ -399,4 +399,4 @@ ab -n 500 -c 10 http://127.0.0.1:3000/failure  # 50% errors to trigger alert
 - Grafana errors? Check browser console or container logs.  
 - Slow? Limit dashboard to 4-6 panels for lab.
 
-You've completed Lab 4! Your Joke API now has a pro dashboard in Grafana. Save as `lab4-guide.md`. Experiment: Add a "Bad Jokes Alert" panel linking to alerts from Lab 3. Ready for more labs?
+You've completed Lab 5! Your Joke API now has a pro dashboard in Grafana. Save as `lab5-guide.md`. Experiment: Add a "Bad Jokes Alert" panel linking to alerts from Lab 3. Ready for more labs?
