@@ -27,9 +27,11 @@ This guide is designed for absolute beginners with an AWS Free Tier account. Eac
 ## Step 1: Explore CloudWatch Monitoring for EC2
 **Why?** CloudWatch automatically collects metrics from EC2 (e.g., CPU, network)—no setup needed!
 
-1. Console > CloudWatch > Metrics > All metrics > EC2 > Per-Instance Metrics.  
+1. Console > EC2
 2. Select your instance (by ID or name tag).  
-3. View graphs: E.g., CPUUtilization (percentage used). Refresh after a few minutes.  
+3. Select Monitoring Tab
+<img width="2832" height="948" alt="image" src="https://github.com/user-attachments/assets/70e64ac0-4115-418f-ab3c-710f0afd3f49" />
+
 
 **Explanation:** Metrics update every 5 minutes (basic) or 1 minute (detailed—enable for $0.01/metric/month). Logs are in CloudWatch Logs if you added the app.
 
@@ -38,10 +40,20 @@ This guide is designed for absolute beginners with an AWS Free Tier account. Eac
 ## Step 2: Create a CloudWatch Alarm
 **Why?** Alarms watch metrics and trigger actions (like notifications) when thresholds are breached—e.g., alert if CPU > 70%.
 
-1. Console > CloudWatch > Alarms > Create alarm.  
-2. Select metric: Search "CPUUtilization" > EC2 > Per-Instance > Your instance.  
+1. Console > CloudWatch > Alarms > Create alarm.
+<img width="3334" height="1706" alt="image" src="https://github.com/user-attachments/assets/94fa0038-caaf-4fda-afad-c7e1655719b1" />
+
+<img width="3336" height="1202" alt="image" src="https://github.com/user-attachments/assets/ad1b4ecd-908d-4446-b9db-51c8082963f0" />
+
+2. Select metric: Search "CPUUtilization" > EC2 > Per-Instance > Your instance.
+<img width="3102" height="1536" alt="image" src="https://github.com/user-attachments/assets/d4793f02-91cf-4149-93ad-6779138dae62" />
+<img width="3080" height="1520" alt="image" src="https://github.com/user-attachments/assets/a0d8c243-e02a-47c0-9fce-c95377a3c356" />
+
 3. Statistic: Average, Period: 1 minute (enable detailed if needed).  
-4. Conditions: Static > Greater > 70 (for high CPU).  
+4. Conditions: Static > Greater > 70 (for high CPU).
+<img width="3278" height="1574" alt="image" src="https://github.com/user-attachments/assets/f131191c-1c25-4c9a-ba93-e2637297e1f7" />
+
+
 5. Additional: Treat missing data as "missing" (default).  
 6. Actions: In alarm > Create new SNS topic (next step). Name alarm: `HighCPU-lab4-{workshoper name}-server`.  
 7. Create.
@@ -54,7 +66,9 @@ This guide is designed for absolute beginners with an AWS Free Tier account. Eac
 1. In alarm creation (or SNS Console > Topics > Create topic): Standard type, Name: `lab4-{workshoper name}-alerts`.  
 2. Create subscription: Protocol: Email, Endpoint: your-email@example.com. Confirm via email link.  
    - For SMS: Protocol: SMS, Endpoint: +1yourphonenumber (international format).  
-   - For Slack: Use Application integration (webhook URL as HTTP endpoint).  
+   - For Slack: Use Application integration (webhook URL as HTTP endpoint).
+  <img width="2730" height="1374" alt="image" src="https://github.com/user-attachments/assets/031e712b-8c8e-4a33-9fa1-2dd3a8fe75a5" />
+ 
 3. Back in alarm: Add notification > Alarm state trigger: In alarm > Send to SNS topic `lab4-{workshoper name}-alerts`.  
 4. Finish alarm.
 
