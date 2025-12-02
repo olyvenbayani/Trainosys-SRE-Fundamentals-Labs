@@ -342,6 +342,19 @@ receivers:
 
 **Troubleshooting:** Test fails? Use `http://host.docker.internal:9090` if on macOS/Windows (localhost bridging). Restart stack.
 
+## Step 5: Simulate Traffic and Trigger Alerts
+**Why?** Test alerting/logging by breaching SLOs.
+
+Update `simulate_traffic.sh` for more failures (to trigger HighErrorRate):
+
+```bash
+#!/bin/bash
+ab -n 500 -c 10 http://127.0.0.1:3000/success
+ab -n 500 -c 10 http://127.0.0.1:3000/failure  # 50% errors to trigger alert
+```
+
+1. Run: `./simulate_traffic.sh`  
+
 ## Step 5: Create Your First Dashboard
 **Why?** Dashboards visualize metrics—build one for the Joke API.
 
